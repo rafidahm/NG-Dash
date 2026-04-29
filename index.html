@@ -990,11 +990,11 @@
         // Configuration
         const GRAVITY = 0.6;
         const JUMP_FORCE = -12;
-        const INITIAL_SPEED = 1.5; // Manageable base speed
-        const MAX_SPEED = 1.8; // Caps at exactly 1.2x multiplier
+        const INITIAL_SPEED = 1.8; // Bumped speed slightly
+        const MAX_SPEED = 2.16; // Caps at exactly 1.2x multiplier
         const SPEED_INCREMENT = 0.00015; // Gradual acceleration
         const CHARACTER_INTERVAL = 800; // Keep as reference
-        const BULLET_SPEED = 7; // Adjusted for new speed
+        const BULLET_SPEED = 8; // Adjusted for new speed
 
         // Sprite Config
         const SPRITE_FRAMES = 16;
@@ -1105,10 +1105,9 @@
         let mentorSpawnReady = false;
         let haterSpawnReady = false;
         let shakeAmount = 0; // For camera shake effect
-        let nextCharacterDist = 100; // Adjusted for slower distance
-        let nextHaterDist = 40; // Appeared too late before
+        let nextHaterDist = 15; // Appeared too late before
         const MENTOR_INTERVAL_SCALED = 180;
-        const HATER_INTERVAL_SCALED = 150; // Much more balanced for mobile
+        const HATER_INTERVAL_SCALED = 35; // Much more balanced for mobile
         let groundY = 0;
         let lastTime = performance.now();
 
@@ -1376,9 +1375,9 @@
             speedEl.textContent = (speed / INITIAL_SPEED).toFixed(1) + 'x';
 
             // Obstacles (Randomized & Continuous)
-            if (Math.random() < 0.12 * timeScale) { // Increased block spawn chance for mobile
+            if (Math.random() < 0.15 * timeScale) { // Increased block spawn chance for mobile
                 // Randomize the gap for a less predictable flow
-                const minGap = 100 + Math.random() * 150; // Reduced gap for more blocks
+                const minGap = 80 + Math.random() * 120; // Reduced gap for more blocks
                 if (obstacles.length === 0 || (canvas.width + 150 - obstacles[obstacles.length - 1].x) > minGap) {
                     spawnObstacle();
                 }
@@ -1856,6 +1855,9 @@
             bullets = [];
             profileCollectibles = [];
             collectedMentors = [];
+            nextHaterDist = 15;
+            haterSpawnReady = false;
+            mentorSpawnReady = false;
 
             // Update UI
             distanceEl.textContent = '0m';
