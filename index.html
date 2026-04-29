@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Faster+One&display=swap"
         rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #7c3aed;
@@ -940,7 +941,7 @@
         <!-- Victory Well Done Overlay -->
         <div id="well-done-overlay" class="overlay hidden">
             <div class="landing-particles" id="victory-particles"></div>
-            <div class="card" style="max-width: 500px; width: 90%;">
+            <div id="victory-card" class="card" style="max-width: 500px; width: 90%;">
                 <h1 class="game-title" style="font-size: 3.5rem; margin-bottom: 5px;">Well Done</h1>
                 <p class="game-subtitle" style="margin-bottom: 10px;">12 Badges Collected</p>
 
@@ -959,9 +960,15 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 15px; justify-content: center; width: 100%;">
-                    <button onclick="location.reload()" class="btn" style="flex: 1;">Play Again</button>
-                    <button onclick="goToHome()" class="btn btn-secondary" style="flex: 1;">Home</button>
+                <div id="victory-buttons">
+                    <div style="display: flex; gap: 15px; justify-content: center; width: 100%; margin-bottom: 10px;">
+                        <button onclick="downloadResult()" class="btn" style="flex: 1; background: var(--secondary); margin-bottom: 0; padding: 12px;">Save ID</button>
+                        <button onclick="shareResult()" class="btn" style="flex: 1; background: #1da1f2; margin-bottom: 0; padding: 12px;">Share</button>
+                    </div>
+                    <div style="display: flex; gap: 15px; justify-content: center; width: 100%;">
+                        <button onclick="location.reload()" class="btn" style="flex: 1; margin-bottom: 0; padding: 12px;">Play Again</button>
+                        <button onclick="goToHome()" class="btn btn-secondary" style="flex: 1; margin-bottom: 0; padding: 12px;">Home</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1905,6 +1912,32 @@
         function hideInventory() {
             document.getElementById('badge-inventory-overlay').classList.add('hidden');
             if (gameState === 'MANUAL_PAUSE') togglePause();
+        }
+
+        function downloadResult() {
+            const card = document.getElementById('victory-card');
+            const btns = document.getElementById('victory-buttons');
+            
+            btns.style.display = 'none'; // Hide buttons for screenshot
+            
+            html2canvas(card, {
+                backgroundColor: '#0f172a',
+                scale: 2 // High res
+            }).then(canvas => {
+                btns.style.display = 'block'; // Restore buttons
+                const link = document.createElement('a');
+                link.download = 'NG_Journey_Legacy_ID.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Download Started!");
+            });
+        }
+
+        function shareResult() {
+            const finalDist = Math.floor(distance * 4);
+            const text = `I just proved my legacy in the NG Dash! 🔥\n\n🛡️ Badges: ${badgesCount}\n🏃 Distance: ${finalDist}m\n👿 Haters Defeated: ${hatersCount}\n\nCan you beat my record? Run the path! #NG #NGDash #NGLegacy`;
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`, '_blank');
         }
 
         draw();
