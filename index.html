@@ -733,11 +733,15 @@
         .landing-footer {
             position: absolute;
             bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: 0.5px;
             font-weight: 300;
             z-index: 10;
+            padding: 0 20px;
         }
 
         .footer-link {
@@ -812,11 +816,17 @@
 
             .game-subtitle {
                 font-size: 0.95rem;
+                margin-bottom: 25px;
             }
 
             .cta-button {
                 padding: 15px 40px;
                 font-size: 1.2rem;
+            }
+
+            .landing-footer {
+                bottom: 15px;
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -1093,6 +1103,7 @@
         const MENTOR_INTERVAL_SCALED = 180;
         const HATER_INTERVAL_SCALED = 150; // Much more balanced for mobile
         let groundY = 0;
+        let lastTime = performance.now();
 
         // Sprite Loading
         let runnerSprite = new Image();
@@ -1318,9 +1329,11 @@
         }
 
         // Main Loop
-        function update() {
+        function update(dt = 16.67) {
+            const timeScale = dt / 16.67; // Normalize to 60fps
+
             // ALWAYS update camera shake and button states even when paused
-            if (shakeAmount > 0) shakeAmount *= 0.9;
+            if (shakeAmount > 0) shakeAmount *= Math.pow(0.9, timeScale);
             else shakeAmount = 0;
 
             if (gameState !== 'RUNNING') {
@@ -1331,8 +1344,8 @@
             }
 
             // Player Physics
-            player.vy += GRAVITY;
-            player.y += player.vy;
+            player.vy += GRAVITY * timeScale;
+            player.y += player.vy * timeScale;
 
             if (player.y > groundY - player.height) {
                 player.y = groundY - player.height;
@@ -1342,21 +1355,21 @@
 
             // Animation logic
             if (!player.isJumping) {
-                player.frameTimer += player.animSpeed * (speed / 4); // Slightly slower animation for 16 frames
+                player.frameTimer += (player.animSpeed * (speed / 4)) * timeScale; // Slightly slower animation for 16 frames
                 player.frame = Math.floor(player.frameTimer) % SPRITE_FRAMES;
             } else {
                 player.frame = 1; // Good looking jump frame for this sheet
             }
 
             // Distance & Speed
-            distance += speed / 450; // Drastically slower distance increment
-            if (speed < MAX_SPEED) speed += SPEED_INCREMENT;
+            distance += (speed / 450) * timeScale; // Drastically slower distance increment
+            if (speed < MAX_SPEED) speed += SPEED_INCREMENT * timeScale;
 
             distanceEl.textContent = Math.floor(distance * 4) + 'm'; // Visual multiplier to show "meters"
             speedEl.textContent = (speed / INITIAL_SPEED).toFixed(1) + 'x';
 
             // Obstacles (Randomized & Continuous)
-            if (Math.random() < 0.065) { // Increased block spawn chance
+            if (Math.random() < 0.065 * timeScale) { // Increased block spawn chance
                 // Randomize the gap for a less predictable flow
                 const minGap = 150 + Math.random() * 300; // Reduced gap for more blocks
                 if (obstacles.length === 0 || (canvas.width + 150 - obstacles[obstacles.length - 1].x) > minGap) {
@@ -1375,7 +1388,7 @@
 
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 const obs = obstacles[i];
-                obs.x -= speed;
+                obs.x -= speed * timeScale;
 
                 // Collision with Player
                 if (
@@ -1446,7 +1459,7 @@
             // Handle Profile Collectibles
             for (let i = profileCollectibles.length - 1; i >= 0; i--) {
                 const p = profileCollectibles[i];
-                p.x -= speed * 0.8;
+                p.x -= (speed * 0.8) * timeScale;
                 // More natural bouncing on ground
                 const bounceCycle = (distance * 0.15) % Math.PI;
                 p.y = groundY - p.height - Math.abs(Math.sin(bounceCycle) * 20);
@@ -1471,17 +1484,24 @@
 
             // Bullets movement
             for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].x += BULLET_SPEED;
+                bullets[i].x += BULLET_SPEED * timeScale;
                 if (bullets[i].x > canvas.width) {
                     bullets.splice(i, 1);
                 }
             }
 
-            updateParticles();
+            // Particle movement
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx * timeScale;
+                p.y += p.vy * timeScale;
+                p.life -= 0.02 * timeScale;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
 
             // Parallax Stars Movement
             stars.forEach(s => {
-                s.x -= s.speed * (speed / 5);
+                s.x -= s.speed * (speed / 5) * timeScale;
                 if (s.x < 0) s.x = canvas.width;
             });
         }
@@ -1705,7 +1725,11 @@
 
             if (gameState !== 'VICTORY') {
                 requestAnimationFrame(() => {
-                    update();
+                    const currentTime = performance.now();
+                    const dt = currentTime - lastTime;
+                    lastTime = currentTime;
+                    
+                    update(dt);
                     draw();
                 });
             }
