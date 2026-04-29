@@ -36,6 +36,7 @@
             overflow: hidden;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             touch-action: none;
         }
 
@@ -825,8 +826,9 @@
             }
 
             .landing-footer {
-                bottom: 15px;
-                font-size: 0.7rem;
+                bottom: max(40px, env(safe-area-inset-bottom));
+                font-size: 0.75rem;
+                padding-bottom: 20px;
             }
         }
     </style>
@@ -1362,16 +1364,16 @@
             }
 
             // Distance & Speed
-            distance += (speed / 450) * timeScale; // Drastically slower distance increment
+            distance += (speed / 100) * timeScale; // Faster distance increment
             if (speed < MAX_SPEED) speed += SPEED_INCREMENT * timeScale;
 
             distanceEl.textContent = Math.floor(distance * 4) + 'm'; // Visual multiplier to show "meters"
             speedEl.textContent = (speed / INITIAL_SPEED).toFixed(1) + 'x';
 
             // Obstacles (Randomized & Continuous)
-            if (Math.random() < 0.065 * timeScale) { // Increased block spawn chance
+            if (Math.random() < 0.12 * timeScale) { // Increased block spawn chance for mobile
                 // Randomize the gap for a less predictable flow
-                const minGap = 150 + Math.random() * 300; // Reduced gap for more blocks
+                const minGap = 100 + Math.random() * 150; // Reduced gap for more blocks
                 if (obstacles.length === 0 || (canvas.width + 150 - obstacles[obstacles.length - 1].x) > minGap) {
                     spawnObstacle();
                 }
