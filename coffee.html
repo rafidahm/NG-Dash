@@ -262,11 +262,11 @@
         }
 
         .community-info p {
-            color: #10b981;
+            color: #94a3b8;
             font-size: 0.95rem;
             margin: 0;
-            font-weight: 600;
         }
+
         .avatar-group {
             display: flex;
             justify-content: center;
@@ -275,6 +275,14 @@
             gap: 15px;
             margin-top: 30px;
             padding-top: 10px;
+        }
+
+        .more-members {
+            margin-top: 25px;
+            color: #10b981;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
         }
 
         .avatar-link {
@@ -601,10 +609,6 @@
             </div>
         </div>
 
-        <div class="gas-fee">
-            <span>Network Fee</span>
-            <span style="color: var(--secondary);">Normal • $0.00</span>
-        </div>
 
         <button id="connect-btn" class="btn btn-primary">Connect Wallet First</button>
         <button id="send-btn" class="btn btn-primary" style="display: none;">Treat ☕</button>
@@ -622,7 +626,7 @@
             <img src="photo_2025-02-13_16-47-30.jpg" alt="NG Community" class="community-img">
             <div class="community-info">
                 <h3>Beloved Community ❤️</h3>
-                <p>+ Thousands more members...</p>
+                <p>Built together, step by step.</p>
             </div>
         </div>
 
@@ -720,6 +724,10 @@
                 <img src="tjyHMS-W_400x400.jpg" alt="Community Member">
             </a>
 
+        </div>
+
+        <div class="more-members">
+            + Thousands more members...
         </div>
     </div>
 
@@ -978,7 +986,6 @@
 
         async function fetchBalances() {
             if (!userAddress) return;
-            txStatus.textContent = "Fetching balances...";
             try {
                 const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
                 const ethBal = await publicClient.getBalance({ address: userAddress });
