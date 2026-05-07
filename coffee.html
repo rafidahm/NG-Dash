@@ -480,6 +480,7 @@
 
         ddConnect.addEventListener('click', () => {
             profileDropdown.style.display = 'none';
+            localStorage.removeItem('manualDisconnect');
             connectBtn.click();
         });
 
@@ -586,6 +587,8 @@
                 txStatus.style.color = "#ef4444";
                 return;
             }
+            
+            localStorage.removeItem('manualDisconnect');
             
             txStatus.textContent = "Connecting wallet...";
             txStatus.style.color = "var(--secondary)";
