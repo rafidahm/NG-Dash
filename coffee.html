@@ -496,6 +496,8 @@
 
         ddEdit.addEventListener('click', () => {
             profileDropdown.style.display = 'none';
+            if (!userAddress) return;
+            base64Image = null;
             const profileData = JSON.parse(localStorage.getItem('profile_' + userAddress.toLowerCase())) || {};
             profileUsername.value = profileData.username || '';
             if (profileData.image) {

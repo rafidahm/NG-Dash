@@ -59,18 +59,7 @@
             touch-action: none;
         }
 
-        /* Badge Popup */
-        #badge-popup {
-            position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 400px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-        }
+
 
         /* UI Overlays */
         .overlay {
@@ -317,7 +306,7 @@
             box-shadow: 0 0 15px var(--secondary);
         }
 
-        #badge-icon {
+        #popup-badge-icon {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -367,66 +356,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Badge Popup */
-        #badge-popup {
-            position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 400px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 1000;
-            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(15px);
-            pointer-events: none;
-        }
 
-        #badge-popup.show {
-            top: 20px;
-        }
-
-        #badge-icon-container {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: 2px solid var(--secondary);
-            overflow: hidden;
-            flex-shrink: 0;
-            box-shadow: 0 0 15px var(--secondary);
-        }
-
-        #badge-icon {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        #badge-info {
-            flex-grow: 1;
-        }
-
-        #badge-name {
-            display: block;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--secondary);
-            margin-bottom: 2px;
-        }
-
-        #badge-msg {
-            display: block;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.2;
-        }
 
         /* Badge Inventory */
         #badge-inventory-overlay {
@@ -654,7 +584,7 @@
         }
 
         .cta-button {
-            background: var(--glass);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid var(--glass-border);
             padding: 18px 50px;
             border-radius: 100px;
@@ -662,7 +592,6 @@
             font-weight: 700;
             color: white;
             cursor: pointer;
-            backdrop-filter: blur(10px);
             box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
             transition: all 0.3s ease;
             position: relative;
@@ -1008,7 +937,7 @@
         <!-- Badge Popup -->
         <div id="badge-popup">
             <div id="badge-icon-container">
-                <img id="badge-icon" src="" alt="Badge">
+                <img id="popup-badge-icon" src="" alt="Badge">
             </div>
             <div id="badge-info">
                 <span id="badge-name">Badge Earned!</span>
@@ -1016,20 +945,7 @@
             </div>
         </div>
 
-        <!-- Victory Overlay -->
-        <div id="victory-overlay" class="overlay hidden">
-            <div class="card">
-                <img id="nazim-avatar" src="" alt="Nazim Vai" class="character-img"
-                    style="width: 150px; height: 150px; border-color: gold;">
-                <h1>Success!</h1>
-                <p>You've reached Nazim Vai! Your journey through the community roadmap is complete.</p>
-                <div class="stat-box" style="margin-bottom: 20px; display: inline-block;">
-                    <div class="stat-label">Final Distance</div>
-                    <div id="final-distance" class="stat-value">0m</div>
-                </div>
-                <button onclick="location.reload()" class="btn">Play Again</button>
-            </div>
-        </div>
+
 
         <!-- Badge Inventory Overlay -->
         <div id="badge-inventory-overlay" class="overlay hidden">
@@ -1089,7 +1005,6 @@
         const badgesEl = document.getElementById('badges-val');
         const hatersEl = document.getElementById('haters-val');
         const startOverlay = document.getElementById('start-overlay');
-        const victoryOverlay = document.getElementById('victory-overlay');
         const toast = document.getElementById('toast');
 
         // Configuration
@@ -1269,7 +1184,10 @@
 
         // Keyboard controls
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' || e.code === 'ArrowUp') handleAction('jump');
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                e.preventDefault();
+                handleAction('jump');
+            }
             if (e.code === 'KeyF' || e.code === 'KeyX') handleAction('fire');
             if (e.code === 'KeyC' || e.code === 'KeyV') handleAction('cash');
             if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
@@ -1296,7 +1214,7 @@
 
         // General click for jump (fallback)
         window.addEventListener('mousedown', (e) => {
-            if (e.target.tagName !== 'BUTTON' && !e.target.closest('.icon-btn')) {
+            if (e.target.tagName !== 'BUTTON' && !e.target.closest('.icon-btn') && !e.target.closest('#profile-badge') && !e.target.closest('#profile-dropdown') && !e.target.closest('#edit-profile-modal')) {
                 handleAction('jump');
             }
         });
@@ -1321,7 +1239,6 @@
             } else if (gameState === 'MANUAL_PAUSE') {
                 gameState = 'RUNNING';
                 document.getElementById('pause-overlay').classList.add('hidden');
-                draw(); // Restart loop
             }
         }
 
@@ -1347,7 +1264,6 @@
                 // Clean up landing particles
                 const lp = document.getElementById('landing-particles');
                 if (lp) lp.innerHTML = '';
-                draw();
             }
         }
 
@@ -1494,7 +1410,7 @@
             // Now handled by blocksDestroyedCount in bullet collision
 
             // Progress Check (Haters)
-            if (distance >= nextHaterDist) {
+            while (distance >= nextHaterDist) {
                 haterSpawnReady = true;
                 nextHaterDist += HATER_INTERVAL_SCALED;
             }
@@ -1836,22 +1752,20 @@
                 ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2 - 100);
             }
 
-            if (gameState !== 'VICTORY') {
-                requestAnimationFrame(() => {
-                    const currentTime = performance.now();
-                    const dt = currentTime - lastTime;
-                    lastTime = currentTime;
-                    
-                    update(dt);
-                    draw();
-                });
-            }
+            requestAnimationFrame(() => {
+                const currentTime = performance.now();
+                const dt = currentTime - lastTime;
+                lastTime = currentTime;
+                
+                update(dt);
+                draw();
+            });
             ctx.restore();
         }
 
         function showBadgePopup(mentor) {
             // Update UI
-            document.getElementById('badge-icon').src = mentor.img;
+            document.getElementById('popup-badge-icon').src = mentor.img;
             document.getElementById('badge-name').textContent = mentor.name + " Badge";
 
             const msg = mentor.q;
@@ -1874,11 +1788,6 @@
                 setTimeout(showWellDone, 2000);
             }
 
-            // Final check
-            if (mentor.final) {
-                setTimeout(showVictory, 4000);
-            }
-
             // Hide after 4 seconds
             setTimeout(() => {
                 popup.classList.remove('show');
@@ -1893,13 +1802,6 @@
             toast.textContent = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        function showVictory() {
-            gameState = 'VICTORY';
-            document.getElementById('nazim-avatar').src = nazimVaiImg;
-            document.getElementById('final-distance').textContent = Math.floor(distance) + 'm';
-            victoryOverlay.classList.remove('hidden');
         }
 
         function showWellDone() {
@@ -1966,6 +1868,10 @@
             haterSpawnReady = false;
             mentorSpawnReady = false;
 
+            player.y = groundY - player.height;
+            player.vy = 0;
+            player.isJumping = false;
+
             // Update UI
             distanceEl.textContent = '0m';
             speedEl.textContent = '1.0x';
@@ -1976,7 +1882,6 @@
             document.getElementById('pause-overlay').classList.add('hidden');
             document.getElementById('badge-inventory-overlay').classList.add('hidden');
             document.getElementById('well-done-overlay').classList.add('hidden');
-            victoryOverlay.classList.add('hidden');
             startOverlay.classList.remove('hidden');
 
             if (typeof window.updateProfileUI === 'function') {
@@ -2167,6 +2072,7 @@
         ddEdit.addEventListener('click', () => {
             profileDropdown.style.display = 'none';
             if (!appUserAddress) return;
+            base64Image = null;
             const profileData = JSON.parse(localStorage.getItem('profile_' + appUserAddress.toLowerCase())) || {};
             profileUsername.value = profileData.username || '';
             if (profileData.image) {
