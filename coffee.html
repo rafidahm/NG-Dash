@@ -188,17 +188,48 @@
             letter-spacing: 1px;
         }
         .motivation-text {
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 20px;
             line-height: 1.6;
-            margin-bottom: 20px;
         }
         .community-img {
             width: 100%;
-            border-radius: 12px;
+            max-width: 500px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            margin-top: 20px;
+        }
+        .avatar-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 10px;
+        }
+        .avatar-group img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 3px solid #0f172a;
+            margin-left: -15px;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+            filter: grayscale(0.2);
+        }
+        .avatar-group img:first-child {
+            margin-left: 0;
+            filter: grayscale(0);
+            border-color: var(--secondary);
+            z-index: 10;
+        }
+        .avatar-group img:hover {
+            transform: translateY(-5px) scale(1.1);
+            filter: grayscale(0);
+            z-index: 20;
         }
         .back-link {
             position: absolute;
@@ -386,6 +417,16 @@
             This project is dedicated to the incredible NG Official Community. Thank you for your relentless support, boundless inspiration, and for pushing the boundaries of what we can achieve together.
         </div>
         <img src="community.jpg" alt="NG Community" class="community-img">
+        
+        <div class="avatar-group">
+            <img src="PlhwenJM_400x400.jpg" alt="Community Member">
+            <img src="3NgKZOL5_400x400.jpg" alt="Community Member">
+            <img src="hcMBtuoB_400x400.jpg" alt="Community Member">
+            <img src="sofn74Ko_400x400.jpg" alt="Community Member">
+            <img src="tjyHMS-W_400x400.jpg" alt="Community Member">
+            <img src="TQQwqXEa_400x400.jpg" alt="Community Member">
+            <img src="w1KCvH9F_400x400.jpg" alt="Community Member">
+        </div>
     </div>
 
     <script type="module">
