@@ -39,6 +39,8 @@
             height: 100vh;
             height: 100dvh;
             touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         #game-container {
@@ -1212,6 +1214,9 @@
         attachButtonEvent('fire-btn', 'fire');
         attachButtonEvent('cash-btn', 'cash');
 
+        // Prevent context menu on long press (mobile annoyance)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
         // General click for jump (fallback)
         window.addEventListener('mousedown', (e) => {
             if (e.target.tagName !== 'BUTTON' && !e.target.closest('.icon-btn') && !e.target.closest('#profile-badge') && !e.target.closest('#profile-dropdown') && !e.target.closest('#edit-profile-modal')) {
@@ -1359,6 +1364,8 @@
 
         // Main Loop
         function update(dt = 16.67) {
+            // Cap dt at 50ms (equivalent to ~20fps drop limit) to prevent physics explosions on lag spikes
+            if (dt > 50) dt = 50; 
             const timeScale = dt / 16.67; // Normalize to 60fps
 
             // ALWAYS update camera shake and button states even when paused
@@ -1394,8 +1401,11 @@
             distance += (speed / 100) * timeScale; // Faster distance increment
             if (speed < MAX_SPEED) speed += SPEED_INCREMENT * timeScale;
 
-            distanceEl.textContent = Math.floor(distance * 4) + 'm'; // Visual multiplier to show "meters"
-            speedEl.textContent = (speed / INITIAL_SPEED).toFixed(1) + 'x';
+            const newDistText = Math.floor(distance * 4) + 'm'; // Visual multiplier to show "meters"
+            if (distanceEl.textContent !== newDistText) distanceEl.textContent = newDistText;
+
+            const newSpeedText = (speed / INITIAL_SPEED).toFixed(1) + 'x';
+            if (speedEl.textContent !== newSpeedText) speedEl.textContent = newSpeedText;
 
             // Obstacles (Randomized & Continuous)
             if (Math.random() < 0.15 * timeScale) { // Increased block spawn chance for mobile
@@ -1447,7 +1457,7 @@
                             shakeAmount = 8; // Heavy shake for haters
                             obstacles.splice(i, 1);
                             bullets.splice(j, 1);
-                            distance += 50;
+                            distance += 12.5; // 12.5 internal = 50m visual
                             showToast("Hater Defeated! +50m");
                             break;
                         } else if (obs.type === 'block' && b.type === 'laser') {
