@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NG Dash - Treat a Coffee</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Faster+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Faster+One&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #7c3aed;
@@ -15,7 +17,13 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --box-bg: rgba(15, 23, 42, 0.7);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Outfit', sans-serif;
             background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
@@ -27,11 +35,13 @@
             padding: 20px;
             overflow-x: hidden;
         }
+
         .header {
             margin-top: 20px;
             margin-bottom: 30px;
             text-align: center;
         }
+
         .game-title {
             font-size: 2.5rem;
             font-weight: 800;
@@ -44,11 +54,13 @@
             align-items: center;
             gap: 10px;
         }
+
         .dash-text {
             font-family: 'Faster One', cursive;
             color: var(--secondary);
             font-weight: 400;
         }
+
         .payment-box {
             background: var(--box-bg);
             backdrop-filter: blur(15px);
@@ -60,6 +72,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             margin-bottom: 20px;
         }
+
         .input-group {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 16px;
@@ -69,15 +82,18 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: border-color 0.3s ease;
         }
+
         .input-group:focus-within {
             border-color: var(--secondary);
         }
+
         .input-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
+
         .amount-input {
             background: transparent;
             border: none;
@@ -88,7 +104,11 @@
             width: 60%;
             outline: none;
         }
-        .amount-input::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+        .amount-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
         .currency-selector {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -99,6 +119,7 @@
             gap: 8px;
             cursor: pointer;
         }
+
         .currency-select {
             background: transparent;
             border: none;
@@ -109,16 +130,22 @@
             cursor: pointer;
             appearance: none;
         }
-        .currency-select option { background: #0f172a; }
+
+        .currency-select option {
+            background: #0f172a;
+        }
+
         .fiat-value {
             font-size: 0.9rem;
             color: #94a3b8;
         }
+
         .balance-display {
             font-size: 0.9rem;
             color: #94a3b8;
             text-align: right;
         }
+
         .gas-fee {
             display: flex;
             justify-content: space-between;
@@ -128,6 +155,7 @@
             padding-top: 15px;
             border-top: 1px solid var(--glass-border);
         }
+
         .btn {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -143,24 +171,29 @@
             text-align: center;
             margin-top: 10px;
         }
+
         .btn-primary {
             background: rgba(6, 182, 212, 0.15);
             border-color: var(--secondary);
             color: var(--secondary);
         }
+
         .btn:hover {
             transform: translateY(-2px);
             background: rgba(255, 255, 255, 0.1);
         }
+
         .btn-primary:hover {
             background: rgba(6, 182, 212, 0.25);
             box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
         }
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
+
         .status-area {
             text-align: center;
             margin-top: 15px;
@@ -169,6 +202,7 @@
             min-height: 20px;
             word-break: break-word;
         }
+
         .motivation-section {
             max-width: 500px;
             text-align: center;
@@ -177,8 +211,9 @@
             background: var(--glass);
             border-radius: 20px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+
         .motivation-title {
             font-size: 1.2rem;
             font-weight: 600;
@@ -187,6 +222,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
         .motivation-text {
             font-size: 1.1rem;
             color: #94a3b8;
@@ -194,6 +230,7 @@
             margin: 0 auto 20px;
             line-height: 1.6;
         }
+
         .community-img {
             width: 100%;
             max-width: 500px;
@@ -202,35 +239,51 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             margin-top: 20px;
         }
+
         .avatar-group {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 30px;
             padding-top: 10px;
         }
+
+        .avatar-link {
+            display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .avatar-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 0 20px var(--secondary);
+            z-index: 20;
+        }
+
         .avatar-group img {
             width: 55px;
             height: 55px;
             border-radius: 50%;
-            border: 3px solid #0f172a;
-            margin-left: -15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             object-fit: cover;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease;
+            display: block;
+            transition: filter 0.3s ease, border-color 0.3s ease;
             filter: grayscale(0.2);
         }
-        .avatar-group img:first-child {
-            margin-left: 0;
+
+        .avatar-link:first-child img {
             filter: grayscale(0);
             border-color: var(--secondary);
-            z-index: 10;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
         }
-        .avatar-group img:hover {
-            transform: translateY(-5px) scale(1.1);
+
+        .avatar-link:hover img {
             filter: grayscale(0);
-            z-index: 20;
+            border-color: var(--secondary);
         }
+
         .back-link {
             position: absolute;
             top: 20px;
@@ -247,7 +300,11 @@
             border: 1px solid var(--glass-border);
             transition: all 0.3s;
         }
-        .back-link:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        .back-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
 
         #profile-badge {
             position: absolute;
@@ -269,7 +326,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        #profile-badge:hover { background: rgba(255, 255, 255, 0.1); }
+
+        #profile-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .profile-icon {
             background: linear-gradient(135deg, #7c3aed, #06b6d4);
             border-radius: 50%;
@@ -283,59 +344,166 @@
             justify-content: center;
             overflow: hidden;
         }
-        .profile-icon img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-        
+
+        .profile-icon img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
         #profile-dropdown {
-            position: absolute; top: 65px; right: 20px;
-            background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; padding: 8px; display: none; flex-direction: column; gap: 5px;
-            backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); z-index: 999; min-width: 160px;
+            position: absolute;
+            top: 65px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            min-width: 160px;
         }
+
         .dropdown-item {
-            background: transparent; border: none; color: white; font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem; padding: 10px 15px; text-align: left; border-radius: 8px; cursor: pointer; transition: background 0.3s;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            padding: 10px 15px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        .dropdown-item:hover { background: rgba(255, 255, 255, 0.1); }
-        
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         #edit-profile-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); display: none;
-            align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
         }
+
         .modal-content {
-            background: var(--box-bg); border: 1px solid var(--glass-border); border-radius: 24px;
-            padding: 30px; width: 100%; max-width: 400px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: var(--box-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
-        .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
-        .modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; color: var(--secondary); text-align: center; }
-        .input-field { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 15px; border-radius: 12px; font-family: 'Outfit', sans-serif; margin-bottom: 15px; outline: none; }
-        .input-field:focus { border-color: var(--secondary); }
-        .file-label { display: block; width: 100%; text-align: center; padding: 12px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; cursor: pointer; margin-bottom: 15px; color: #94a3b8; }
-        .file-label:hover { border-color: var(--secondary); color: white; }
-        #profile-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px; display: none; border: 2px solid var(--secondary); }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--secondary);
+        }
+
+        .file-label {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            color: #94a3b8;
+        }
+
+        .file-label:hover {
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        #profile-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: none;
+            border: 2px solid var(--secondary);
+        }
 
         @media (max-width: 480px) {
             .header {
                 margin-top: 70px;
             }
+
             .game-title {
                 font-size: 2rem;
             }
+
             .payment-box {
                 padding: 20px;
             }
+
             .amount-input {
                 font-size: 1.5rem;
             }
+
             .motivation-section {
                 padding: 15px;
             }
+
             .back-link {
                 top: 15px;
                 left: 15px;
                 font-size: 0.85rem;
                 padding: 6px 12px;
             }
+
             #profile-badge {
                 top: 15px;
                 right: 15px;
@@ -345,12 +513,14 @@
         }
     </style>
 </head>
+
 <body>
     <a href="index.html" class="back-link">← Back</a>
 
     <div id="profile-badge">
         <div class="profile-icon" id="badge-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
             </svg>
@@ -359,10 +529,13 @@
     </div>
 
     <div id="profile-dropdown">
-        <div class="dropdown-item" id="dd-address-display" style="display:none; color: #94a3b8; font-size: 0.85rem; cursor: default; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 5px;"></div>
+        <div class="dropdown-item" id="dd-address-display"
+            style="display:none; color: #94a3b8; font-size: 0.85rem; cursor: default; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 5px;">
+        </div>
         <button class="dropdown-item" id="dd-connect">Connect Wallet</button>
         <button class="dropdown-item" id="dd-edit" style="display:none;">Edit Profile</button>
-        <button class="dropdown-item" id="dd-disconnect" style="display:none; color: #ef4444;">Disconnect Wallet</button>
+        <button class="dropdown-item" id="dd-disconnect" style="display:none; color: #ef4444;">Disconnect
+            Wallet</button>
     </div>
 
     <div id="edit-profile-modal">
@@ -396,7 +569,8 @@
             </div>
             <div class="input-row">
                 <div class="fiat-value" id="fiat-value">$0.00</div>
-                <div class="balance-display">Balance: <span id="wallet-balance">0.00</span> <span id="balance-label">ETH</span></div>
+                <div class="balance-display">Balance: <span id="wallet-balance">0.00</span> <span
+                        id="balance-label">ETH</span></div>
             </div>
         </div>
 
@@ -407,25 +581,112 @@
 
         <button id="connect-btn" class="btn btn-primary">Connect Wallet First</button>
         <button id="send-btn" class="btn btn-primary" style="display: none;">Treat ☕</button>
-        
+
         <div id="tx-status" class="status-area"></div>
     </div>
 
     <div class="motivation-section">
         <div class="motivation-title">Run the path. Break the limits. Believe in NG.</div>
         <div class="motivation-text">
-            This project is dedicated to the incredible NG Official Community. Thank you for your relentless support, boundless inspiration, and for pushing the boundaries of what we can achieve together.
+            This project is dedicated to the incredible NG Official Community. Thank you for your relentless support,
+            boundless inspiration, and for pushing the boundaries of what we can achieve together.
         </div>
-        <img src="community.jpg" alt="NG Community" class="community-img">
-        
+        <img src="photo_2025-02-13_16-47-30.jpg" alt="NG Community" class="community-img">
+
         <div class="avatar-group">
-            <img src="PlhwenJM_400x400.jpg" alt="Community Member">
-            <img src="3NgKZOL5_400x400.jpg" alt="Community Member">
-            <img src="hcMBtuoB_400x400.jpg" alt="Community Member">
-            <img src="sofn74Ko_400x400.jpg" alt="Community Member">
-            <img src="tjyHMS-W_400x400.jpg" alt="Community Member">
-            <img src="TQQwqXEa_400x400.jpg" alt="Community Member">
-            <img src="w1KCvH9F_400x400.jpg" alt="Community Member">
+            <!-- First Image (Requested) -->
+            <a href="https://x.com/shahrianazim6" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="PlhwenJM_400x400.jpg" alt="Community Member">
+            </a>
+
+            <!-- All Other Images -->
+            <a href="https://x.com/mdshefat217" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="2RUnC00-_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/mizan_717" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="3NgKZOL5_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/TG_sany012" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="3UzCVwQs_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/naimulislam2521" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="6ZxvRsoN_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Sazid3434" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="2ia-3Sv8_400x400.jpg" alt="Community Member">
+            </a>
+
+            <a href="https://x.com/mdsharman21" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="Ajma5tZm_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/al_shifat_" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="u82uzaLB_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Roney28" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="w1KCvH9F_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Khairul5152" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="PMHEXEAR_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/sumon9_x" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="GCQ1SV15_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Sonny512512" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="PmqY-qzU_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Rabiussunny11" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="T0LjAu4X_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/0xoviweb3" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="TQQwqXEa_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/0xred_9" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="XxZCxLUA_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/RSami007" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="Y0bAu2Og_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Alchemy9x" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="cikwYTxE_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Adib2410119" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="f5gzj7da_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/MdRahi444797" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="fH96kDa__400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/Samiyul18" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="hcMBtuoB_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/0xmim9" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="sofn74Ko_400x400.jpg" alt="Community Member">
+            </a>
+            <a href="https://x.com/axelaxn" target="_blank" rel="noopener noreferrer" class="avatar-link"
+                title="View Twitter Profile">
+                <img src="tjyHMS-W_400x400.jpg" alt="Community Member">
+            </a>
+
         </div>
     </div>
 
@@ -440,7 +701,7 @@
         const walletBalanceEl = document.getElementById('wallet-balance');
         const balanceLabel = document.getElementById('balance-label');
         const fiatValue = document.getElementById('fiat-value');
-        
+
         const profileBadge = document.getElementById('profile-badge');
         const profileAddress = document.getElementById('profile-address');
         const badgeIcon = document.getElementById('badge-icon');
@@ -477,7 +738,7 @@
             if (userAddress) {
                 const profileData = JSON.parse(localStorage.getItem('profile_' + userAddress.toLowerCase())) || {};
                 profileAddress.textContent = profileData.username || formatAddress(userAddress);
-                
+
                 if (profileData.image) {
                     badgeIcon.innerHTML = `<img src="${profileData.image}">`;
                 } else {
@@ -491,19 +752,19 @@
                     addrDisplay.textContent = 'Wallet: ' + formatAddress(userAddress);
                     addrDisplay.style.display = 'block';
                 }
-                
+
                 connectBtn.style.display = 'none';
                 sendBtn.style.display = 'block';
                 fetchBalances();
             } else {
                 profileAddress.textContent = "Guest";
                 badgeIcon.innerHTML = defaultSvg;
-                
+
                 ddConnect.style.display = 'block';
                 ddEdit.style.display = 'none';
                 ddDisconnect.style.display = 'none';
                 if (addrDisplay) addrDisplay.style.display = 'none';
-                
+
                 connectBtn.style.display = 'block';
                 sendBtn.style.display = 'none';
                 txStatus.textContent = "";
@@ -640,12 +901,12 @@
                 txStatus.style.color = "#ef4444";
                 return;
             }
-            
+
             localStorage.removeItem('manualDisconnect');
-            
+
             txStatus.textContent = "Connecting wallet...";
             txStatus.style.color = "var(--secondary)";
-            
+
             try {
                 const client = createWalletClient({
                     chain: baseMainnet,
@@ -654,9 +915,9 @@
 
                 const [address] = await client.requestAddresses();
                 userAddress = address;
-                
+
                 const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                if (chainId !== '0x2105') { 
+                if (chainId !== '0x2105') {
                     txStatus.textContent = "Please switch to Base network.";
                     txStatus.style.color = "#ef4444";
                     try {
@@ -689,7 +950,7 @@
                 const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
                 const ethBal = await publicClient.getBalance({ address: userAddress });
                 balances.ETH = Number(formatEther(ethBal)).toFixed(4);
-                
+
                 try {
                     const usdcBal = await publicClient.readContract({
                         address: usdcAddress,
@@ -701,9 +962,9 @@
                 } catch (e) {
                     balances.USDC = "0.00";
                 }
-                
+
                 walletBalanceEl.textContent = balances[currencySelect.value];
-            } catch(e) {
+            } catch (e) {
                 console.error("Failed fetching balances", e);
             }
         }
@@ -715,7 +976,7 @@
             const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
 
             const currency = currencySelect.value;
-            
+
             if (!amountInput.value || parseFloat(amountInput.value) <= 0) {
                 txStatus.textContent = "Please enter a valid amount.";
                 txStatus.style.color = "#ef4444";
@@ -725,11 +986,11 @@
 
             txStatus.textContent = "Waiting for wallet confirmation...";
             txStatus.style.color = "var(--secondary)";
-            
+
             try {
                 let txHash;
                 const builderCode = '62635f6b6f7661623734790b0080218021802180218021802180218021';
-                
+
                 if (currency === 'ETH') {
                     txHash = await client.sendTransaction({
                         account: userAddress,
@@ -754,14 +1015,14 @@
                 }
 
                 txStatus.textContent = "Transaction pending...";
-                
+
                 await publicClient.waitForTransactionReceipt({ hash: txHash });
 
                 txStatus.textContent = `Transaction successful! Hash: ${txHash}`;
                 txStatus.style.color = "#10b981";
-                
+
                 await fetchBalances();
-                
+
             } catch (err) {
                 console.error(err);
                 txStatus.textContent = "Transaction failed";
@@ -793,4 +1054,5 @@
         initConnectionState();
     </script>
 </body>
+
 </html>
