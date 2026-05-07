@@ -217,10 +217,79 @@
             transition: all 0.3s;
         }
         .back-link:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        #profile-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 8px 16px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .profile-icon {
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                margin-top: 70px;
+            }
+            .game-title {
+                font-size: 2rem;
+            }
+            .payment-box {
+                padding: 20px;
+            }
+            .amount-input {
+                font-size: 1.5rem;
+            }
+            .motivation-section {
+                padding: 15px;
+            }
+            .back-link {
+                top: 15px;
+                left: 15px;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+            #profile-badge {
+                top: 15px;
+                right: 15px;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-link">← Back</a>
+
+    <div id="profile-badge">
+        <div class="profile-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <span id="profile-address">0x00...0000</span>
+    </div>
 
     <div class="header">
         <h1 class="game-title">NG <span class="dash-text">DASH</span></h1>
@@ -273,9 +342,36 @@
         const walletBalanceEl = document.getElementById('wallet-balance');
         const balanceLabel = document.getElementById('balance-label');
         const fiatValue = document.getElementById('fiat-value');
+        
+        const profileBadge = document.getElementById('profile-badge');
+        const profileAddress = document.getElementById('profile-address');
 
         let userAddress = null;
         let balances = { ETH: "0.00", USDC: "0.00" };
+
+        function formatAddress(address) {
+            if (!address) return "";
+            return address.slice(0, 6) + '...' + address.slice(-4);
+        }
+
+        function handleAccountChange(accounts) {
+            if (accounts && accounts.length > 0) {
+                userAddress = accounts[0];
+                profileAddress.textContent = formatAddress(userAddress);
+                profileBadge.style.display = 'flex';
+                connectBtn.style.display = 'none';
+                sendBtn.style.display = 'block';
+                fetchBalances();
+            } else {
+                userAddress = null;
+                profileBadge.style.display = 'none';
+                connectBtn.style.display = 'block';
+                sendBtn.style.display = 'none';
+                txStatus.textContent = "";
+                balances = { ETH: "0.00", USDC: "0.00" };
+                walletBalanceEl.textContent = "0.00";
+            }
+        }
 
         const usdcAddress = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
         const usdcAbi = [
@@ -346,11 +442,8 @@
                     }
                 }
 
-                await fetchBalances();
-
-                connectBtn.style.display = 'none';
-                sendBtn.style.display = 'block';
-                txStatus.textContent = "Connected. Ready to send.";
+                handleAccountChange(accounts);
+                txStatus.textContent = "Connected. Ready to treat!";
                 txStatus.style.color = "#10b981";
 
             } catch (err) {
@@ -446,6 +539,29 @@
                 txStatus.style.color = "#ef4444";
             }
         });
+
+        async function initConnectionState() {
+            if (window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts && accounts.length > 0) {
+                        handleAccountChange(accounts);
+                    }
+
+                    window.ethereum.on('accountsChanged', (newAccounts) => {
+                        handleAccountChange(newAccounts);
+                    });
+
+                    window.ethereum.on('chainChanged', () => {
+                        window.location.reload();
+                    });
+                } catch (err) {
+                    console.error("Auto-connect failed", err);
+                }
+            }
+        }
+
+        initConnectionState();
     </script>
 </body>
 </html>

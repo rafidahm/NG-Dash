@@ -829,11 +829,55 @@
                 font-size: 0.75rem;
                 padding-bottom: 20px;
             }
+            #profile-badge {
+                top: 15px;
+                right: 15px;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+        }
+
+        #profile-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 8px 16px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        .profile-icon {
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 
 <body>
+    <div id="profile-badge">
+        <div class="profile-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <span id="profile-address">0x00...0000</span>
+    </div>
 
     <div id="game-container">
         <div id="hud">
@@ -1949,7 +1993,46 @@
         draw();
     </script>
 
+    <!-- Global Web3 Connection State -->
+    <script type="module">
+        const profileBadge = document.getElementById('profile-badge');
+        const profileAddress = document.getElementById('profile-address');
 
+        function formatAddress(address) {
+            if (!address) return "";
+            return address.slice(0, 6) + '...' + address.slice(-4);
+        }
+
+        function updateProfileUI(accounts) {
+            if (accounts && accounts.length > 0) {
+                profileAddress.textContent = formatAddress(accounts[0]);
+                profileBadge.style.display = 'flex';
+            } else {
+                profileBadge.style.display = 'none';
+            }
+        }
+
+        async function initConnectionState() {
+            if (window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    updateProfileUI(accounts);
+
+                    window.ethereum.on('accountsChanged', (newAccounts) => {
+                        updateProfileUI(newAccounts);
+                    });
+
+                    window.ethereum.on('chainChanged', () => {
+                        window.location.reload();
+                    });
+                } catch (err) {
+                    console.error("Auto-connect failed", err);
+                }
+            }
+        }
+
+        initConnectionState();
+    </script>
 </body>
 
 </html>
