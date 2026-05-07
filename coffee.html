@@ -1012,6 +1012,13 @@
         sendBtn.addEventListener('click', async () => {
             if (!userAddress) return;
 
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chainId !== '0x2105') {
+                txStatus.textContent = "Please switch to Base Chain in your wallet.";
+                txStatus.style.color = "#ef4444";
+                return;
+            }
+
             const client = createWalletClient({ chain: baseMainnet, transport: custom(window.ethereum) });
             const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
 
