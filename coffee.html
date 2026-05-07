@@ -244,12 +244,14 @@
             border-radius: 50%;
             width: 24px;
             height: 24px;
+            min-width: 24px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
-        .profile-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-icon img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         
         #profile-dropdown {
             position: absolute; top: 65px; right: 20px;
@@ -325,6 +327,7 @@
     </div>
 
     <div id="profile-dropdown">
+        <div class="dropdown-item" id="dd-address-display" style="display:none; color: #94a3b8; font-size: 0.85rem; cursor: default; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 5px;"></div>
         <button class="dropdown-item" id="dd-connect">Connect Wallet</button>
         <button class="dropdown-item" id="dd-edit" style="display:none;">Edit Profile</button>
         <button class="dropdown-item" id="dd-disconnect" style="display:none; color: #ef4444;">Disconnect Wallet</button>
@@ -428,6 +431,7 @@
         }
 
         function updateProfileUI() {
+            const addrDisplay = document.getElementById('dd-address-display');
             if (userAddress) {
                 const profileData = JSON.parse(localStorage.getItem('profile_' + userAddress.toLowerCase())) || {};
                 profileAddress.textContent = profileData.username || formatAddress(userAddress);
@@ -441,6 +445,10 @@
                 ddConnect.style.display = 'none';
                 ddEdit.style.display = 'block';
                 ddDisconnect.style.display = 'block';
+                if (addrDisplay) {
+                    addrDisplay.textContent = 'Wallet: ' + formatAddress(userAddress);
+                    addrDisplay.style.display = 'block';
+                }
                 
                 connectBtn.style.display = 'none';
                 sendBtn.style.display = 'block';
@@ -452,6 +460,7 @@
                 ddConnect.style.display = 'block';
                 ddEdit.style.display = 'none';
                 ddDisconnect.style.display = 'none';
+                if (addrDisplay) addrDisplay.style.display = 'none';
                 
                 connectBtn.style.display = 'block';
                 sendBtn.style.display = 'none';
