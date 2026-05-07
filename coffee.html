@@ -231,15 +231,42 @@
             line-height: 1.6;
         }
 
-        .community-img {
-            width: 100%;
-            max-width: 500px;
+        .community-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px auto 20px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px 25px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .community-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            flex-shrink: 0;
         }
 
+        .community-info h3 {
+            font-size: 1.4rem;
+            color: white;
+            margin: 0 0 5px 0;
+            font-weight: 700;
+        }
+
+        .community-info p {
+            color: #10b981;
+            font-size: 0.95rem;
+            margin: 0;
+            font-weight: 600;
+        }
         .avatar-group {
             display: flex;
             justify-content: center;
@@ -591,7 +618,13 @@
             This project is dedicated to the incredible NG Official Community. Thank you for your relentless support,
             boundless inspiration, and for pushing the boundaries of what we can achieve together.
         </div>
-        <img src="photo_2025-02-13_16-47-30.jpg" alt="NG Community" class="community-img">
+        <div class="community-header">
+            <img src="photo_2025-02-13_16-47-30.jpg" alt="NG Community" class="community-img">
+            <div class="community-info">
+                <h3>Beloved Community ❤️</h3>
+                <p>+ Thousands more members...</p>
+            </div>
+        </div>
 
         <div class="avatar-group">
             <!-- First Image (Requested) -->
