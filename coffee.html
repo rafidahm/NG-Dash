@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NG Dash - Treat a Coffee</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Faster+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --secondary: #06b6d4;
+            --bg: #0f172a;
+            --text: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --box-bg: rgba(15, 23, 42, 0.7);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: #ffffff;
+            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.5));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .dash-text {
+            font-family: 'Faster One', cursive;
+            color: var(--secondary);
+            font-weight: 400;
+        }
+        .payment-box {
+            background: var(--box-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+        .input-group {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: border-color 0.3s ease;
+        }
+        .input-group:focus-within {
+            border-color: var(--secondary);
+        }
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .amount-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            width: 60%;
+            outline: none;
+        }
+        .amount-input::placeholder { color: rgba(255, 255, 255, 0.2); }
+        .currency-selector {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .currency-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+        }
+        .currency-select option { background: #0f172a; }
+        .fiat-value {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        .balance-display {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-align: right;
+        }
+        .gas-fee {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .btn-primary {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .btn-primary:hover {
+            background: rgba(6, 182, 212, 0.25);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status-area {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            min-height: 20px;
+            word-break: break-word;
+        }
+        .motivation-section {
+            max-width: 500px;
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .motivation-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .motivation-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .community-img {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--glass);
+            padding: 8px 15px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+        .back-link:hover { color: white; background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back</a>
+
+    <div class="header">
+        <h1 class="game-title">NG <span class="dash-text">DASH</span></h1>
+    </div>
+
+    <div class="payment-box">
+        <div class="input-group">
+            <div class="input-row">
+                <input type="number" id="eth-amount" class="amount-input" placeholder="0.0" step="0.00001" min="0">
+                <div class="currency-selector">
+                    <select id="currency-select" class="currency-select">
+                        <option value="ETH">ETH</option>
+                        <option value="USDC">USDC</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="fiat-value" id="fiat-value">$0.00</div>
+                <div class="balance-display">Balance: <span id="wallet-balance">0.00</span> <span id="balance-label">ETH</span></div>
+            </div>
+        </div>
+
+        <div class="gas-fee">
+            <span>Network Fee</span>
+            <span style="color: var(--secondary);">Normal • $0.00</span>
+        </div>
+
+        <button id="connect-btn" class="btn btn-primary">Connect Wallet First</button>
+        <button id="send-btn" class="btn btn-primary" style="display: none;">Treat ☕</button>
+        
+        <div id="tx-status" class="status-area"></div>
+    </div>
+
+    <div class="motivation-section">
+        <div class="motivation-title">Run the path. Break the limits. Believe in NG.</div>
+        <div class="motivation-text">
+            This project is dedicated to the incredible NG Official Community. Thank you for your relentless support, boundless inspiration, and for pushing the boundaries of what we can achieve together.
+        </div>
+        <img src="community.jpg" alt="NG Community" class="community-img">
+    </div>
+
+    <script type="module">
+        import { createWalletClient, createPublicClient, custom, http, parseEther, formatEther, parseUnits, formatUnits, encodeFunctionData } from 'https://esm.sh/viem';
+
+        const connectBtn = document.getElementById('connect-btn');
+        const sendBtn = document.getElementById('send-btn');
+        const txStatus = document.getElementById('tx-status');
+        const amountInput = document.getElementById('eth-amount');
+        const currencySelect = document.getElementById('currency-select');
+        const walletBalanceEl = document.getElementById('wallet-balance');
+        const balanceLabel = document.getElementById('balance-label');
+        const fiatValue = document.getElementById('fiat-value');
+
+        let userAddress = null;
+        let balances = { ETH: "0.00", USDC: "0.00" };
+
+        const usdcAddress = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
+        const usdcAbi = [
+            { "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+            { "inputs": [{ "name": "to", "type": "address" }, { "name": "amount", "type": "uint256" }], "name": "transfer", "outputs": [{ "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }
+        ];
+
+        const baseMainnet = {
+            id: 8453,
+            name: 'Base',
+            network: 'base',
+            nativeCurrency: { decimals: 18, name: 'Ether', symbol: 'ETH' },
+            rpcUrls: {
+                default: { http: ['https://mainnet.base.org'] },
+                public: { http: ['https://mainnet.base.org'] },
+            },
+            blockExplorers: {
+                default: { name: 'Basescan', url: 'https://basescan.org' },
+            },
+        };
+
+        // Dummy fiat update
+        amountInput.addEventListener('input', () => {
+            const val = parseFloat(amountInput.value) || 0;
+            const rate = currencySelect.value === 'ETH' ? 3000 : 1; // dummy rates
+            fiatValue.textContent = '$' + (val * rate).toFixed(2);
+        });
+
+        currencySelect.addEventListener('change', () => {
+            const curr = currencySelect.value;
+            balanceLabel.textContent = curr;
+            walletBalanceEl.textContent = balances[curr];
+            amountInput.dispatchEvent(new Event('input'));
+        });
+
+        connectBtn.addEventListener('click', async () => {
+            if (!window.ethereum) {
+                txStatus.textContent = "No EVM wallet found. Please install MetaMask.";
+                txStatus.style.color = "#ef4444";
+                return;
+            }
+            
+            txStatus.textContent = "Connecting wallet...";
+            txStatus.style.color = "var(--secondary)";
+            
+            try {
+                const client = createWalletClient({
+                    chain: baseMainnet,
+                    transport: custom(window.ethereum)
+                });
+
+                const [address] = await client.requestAddresses();
+                userAddress = address;
+                
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (chainId !== '0x2105') { 
+                    txStatus.textContent = "Please switch to Base network.";
+                    txStatus.style.color = "#ef4444";
+                    try {
+                        await client.switchChain({ id: baseMainnet.id });
+                    } catch (switchError) {
+                        if (switchError.code === 4902) {
+                            await client.addChain({ chain: baseMainnet });
+                        } else {
+                            txStatus.textContent = "Network switch failed.";
+                            return;
+                        }
+                    }
+                }
+
+                await fetchBalances();
+
+                connectBtn.style.display = 'none';
+                sendBtn.style.display = 'block';
+                txStatus.textContent = "Connected. Ready to send.";
+                txStatus.style.color = "#10b981";
+
+            } catch (err) {
+                console.error(err);
+                txStatus.textContent = "Connection failed.";
+                txStatus.style.color = "#ef4444";
+            }
+        });
+
+        async function fetchBalances() {
+            if (!userAddress) return;
+            txStatus.textContent = "Fetching balances...";
+            try {
+                const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
+                const ethBal = await publicClient.getBalance({ address: userAddress });
+                balances.ETH = Number(formatEther(ethBal)).toFixed(4);
+                
+                try {
+                    const usdcBal = await publicClient.readContract({
+                        address: usdcAddress,
+                        abi: usdcAbi,
+                        functionName: 'balanceOf',
+                        args: [userAddress]
+                    });
+                    balances.USDC = Number(formatUnits(usdcBal, 6)).toFixed(2);
+                } catch (e) {
+                    balances.USDC = "0.00";
+                }
+                
+                walletBalanceEl.textContent = balances[currencySelect.value];
+            } catch(e) {
+                console.error("Failed fetching balances", e);
+            }
+        }
+
+        sendBtn.addEventListener('click', async () => {
+            if (!userAddress) return;
+
+            const client = createWalletClient({ chain: baseMainnet, transport: custom(window.ethereum) });
+            const publicClient = createPublicClient({ chain: baseMainnet, transport: http() });
+
+            const currency = currencySelect.value;
+            
+            if (!amountInput.value || parseFloat(amountInput.value) <= 0) {
+                txStatus.textContent = "Please enter a valid amount.";
+                txStatus.style.color = "#ef4444";
+                return;
+            }
+            const amountToSend = amountInput.value.toString();
+
+            txStatus.textContent = "Waiting for wallet confirmation...";
+            txStatus.style.color = "var(--secondary)";
+            
+            try {
+                let txHash;
+                const builderCode = '62635f6b6f7661623734790b0080218021802180218021802180218021';
+                
+                if (currency === 'ETH') {
+                    txHash = await client.sendTransaction({
+                        account: userAddress,
+                        to: '0x57E7f789D2A85CccF52B9992B88283B6A7588cCb',
+                        value: parseEther(amountToSend),
+                        data: '0x' + builderCode,
+                        chain: baseMainnet
+                    });
+                } else {
+                    const transferData = encodeFunctionData({
+                        abi: usdcAbi,
+                        functionName: 'transfer',
+                        args: ['0x57E7f789D2A85CccF52B9992B88283B6A7588cCb', parseUnits(amountToSend, 6)]
+                    });
+                    txHash = await client.sendTransaction({
+                        account: userAddress,
+                        to: usdcAddress,
+                        value: 0n,
+                        data: transferData + builderCode,
+                        chain: baseMainnet
+                    });
+                }
+
+                txStatus.textContent = "Transaction pending...";
+                
+                await publicClient.waitForTransactionReceipt({ hash: txHash });
+
+                txStatus.textContent = `Transaction successful! Hash: ${txHash}`;
+                txStatus.style.color = "#10b981";
+                
+                await fetchBalances();
+                
+            } catch (err) {
+                console.error(err);
+                txStatus.textContent = "Transaction failed";
+                txStatus.style.color = "#ef4444";
+            }
+        });
+    </script>
+</body>
+</html>
