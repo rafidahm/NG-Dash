@@ -1338,6 +1338,8 @@
             if (gameState === 'START') {
                 gameState = 'RUNNING';
                 startOverlay.classList.add('hidden');
+                const pBadge = document.getElementById('profile-badge');
+                if (pBadge) pBadge.style.display = 'none';
                 // Clean up landing particles
                 const lp = document.getElementById('landing-particles');
                 if (lp) lp.innerHTML = '';
@@ -1973,6 +1975,10 @@
             victoryOverlay.classList.add('hidden');
             startOverlay.classList.remove('hidden');
 
+            if (typeof window.updateProfileUI === 'function') {
+                window.updateProfileUI();
+            }
+
             // Re-init particles
             initLandingParticles();
         }
@@ -2090,23 +2096,39 @@
                 ddConnect.style.display = 'none';
                 ddEdit.style.display = 'block';
                 ddDisconnect.style.display = 'block';
+                
+                // Only show badge if game is NOT running
+                if (typeof gameState !== 'undefined' && gameState !== 'START') {
+                    profileBadge.style.display = 'none';
+                } else {
+                    profileBadge.style.display = 'flex';
+                }
             } else {
                 profileAddress.textContent = "Guest";
                 badgeIcon.innerHTML = defaultSvg;
                 ddConnect.style.display = 'block';
                 ddEdit.style.display = 'none';
                 ddDisconnect.style.display = 'none';
+                
+                if (typeof gameState !== 'undefined' && gameState !== 'START') {
+                    profileBadge.style.display = 'none';
+                } else {
+                    profileBadge.style.display = 'flex';
+                }
             }
         }
+        window.updateProfileUI = updateProfileUI;
 
         ddDisconnect.addEventListener('click', () => {
             profileDropdown.style.display = 'none';
             appUserAddress = null;
+            localStorage.setItem('manualDisconnect', 'true');
             updateProfileUI();
         });
 
         ddConnect.addEventListener('click', async () => {
             profileDropdown.style.display = 'none';
+            localStorage.removeItem('manualDisconnect');
             if (window.ethereum) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -2190,7 +2212,7 @@
             if (window.ethereum) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    if (accounts && accounts.length > 0) {
+                    if (accounts && accounts.length > 0 && localStorage.getItem('manualDisconnect') !== 'true') {
                         appUserAddress = accounts[0];
                     }
                     updateProfileUI();
