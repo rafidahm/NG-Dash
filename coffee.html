@@ -461,9 +461,20 @@
             }
         }
 
-        ddDisconnect.addEventListener('click', () => {
+        ddDisconnect.addEventListener('click', async () => {
             profileDropdown.style.display = 'none';
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({
+                        method: "wallet_revokePermissions",
+                        params: [{ eth_accounts: {} }]
+                    });
+                } catch (e) {
+                    console.log("Revoke failed or not supported", e);
+                }
+            }
             userAddress = null;
+            localStorage.setItem('manualDisconnect', 'true');
             updateProfileUI();
         });
 
@@ -706,10 +717,10 @@
             if (window.ethereum) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    if (accounts && accounts.length > 0) {
+                    if (accounts && accounts.length > 0 && localStorage.getItem('manualDisconnect') !== 'true') {
                         userAddress = accounts[0];
-                        updateProfileUI();
                     }
+                    updateProfileUI();
 
                     // Remove accountsChanged handling to prevent auto-syncing
                     // window.ethereum.on('accountsChanged', (newAccounts) => { ... });

@@ -2119,8 +2119,18 @@
         }
         window.updateProfileUI = updateProfileUI;
 
-        ddDisconnect.addEventListener('click', () => {
+        ddDisconnect.addEventListener('click', async () => {
             profileDropdown.style.display = 'none';
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({
+                        method: "wallet_revokePermissions",
+                        params: [{ eth_accounts: {} }]
+                    });
+                } catch (e) {
+                    console.log("Revoke failed or not supported", e);
+                }
+            }
             appUserAddress = null;
             localStorage.setItem('manualDisconnect', 'true');
             updateProfileUI();
